@@ -4,6 +4,7 @@
  * @flow
  */
 
+import * as firebase from 'firebase';
 import React, { Component } from 'react';
 import {
   Platform,
@@ -18,6 +19,15 @@ const instructions = Platform.select({
   android: 'Double tap R on your keyboard to reload,\n' +
     'Shake or press menu button for dev menu',
 });
+
+const firebaseConfig = {
+  apiKey: '',
+  authDomain: '',
+  databaseURL: '',
+  storageBucket: '',
+};
+
+const firebaseApp = firebase.initializeApp(firebaseConfig);
 
 export default class App extends Component<{}> {
   render() {
