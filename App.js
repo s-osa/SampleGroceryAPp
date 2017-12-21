@@ -49,8 +49,26 @@ export default class App extends Component<{}> {
   }
 
   _renderItem(item) {
+    const onPress = () => {
+      AlertIOS.prompt(
+        'Complete',
+        'Would you like to remove this item?',
+        [
+          {
+            text: 'Complete',
+            onPress: (text) => { this.itemsRef.child(item._key).remove() },
+          },
+          {
+            text: 'Cancel',
+            onPress: (text) => { console.log('Cancel') },
+          },
+        ],
+        'default',
+      );
+    };
+
     return (
-      <ListItem item={item} onpress={ () => {} }/>
+      <ListItem item={item} onPress={onPress}/>
     );
   }
 
