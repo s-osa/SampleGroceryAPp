@@ -31,6 +31,9 @@ const firebaseApp = firebase.initializeApp(firebaseConfig);
 export default class App extends Component<{}> {
   constructor(props) {
     super(props);
+
+    this.itemsRef = firebaseApp.database().ref();
+
     this.state = {
       dataSource: new ListView.DataSource(
         {
@@ -41,17 +44,35 @@ export default class App extends Component<{}> {
   }
 
   componentDidMount() {
-    this.setState(
-      {
-        dataSource: this.state.dataSource.cloneWithRows([{title: 'Pizza'}])
-      }
-    );
+    this.listenForItems(this.itemsRef);
   }
 
   _renderItem(item) {
     return (
       <ListItem item={item} onpress={ () => {} }/>
     );
+  }
+
+  listenForItems(itemsRef) {
+    itemsRef.on('value', (snap) => {
+      // Get children as an array
+      let items = [];
+
+      snap.forEach((child) => {
+        items.push(
+          {
+            title: child.val().title,
+            _key: child.key,
+          }
+        )
+      });
+
+      this.setState(
+        {
+          dataSource: this.state.dataSource.cloneWithRows(items),
+        }
+      )
+    })
   }
 
   render() {
