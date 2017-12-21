@@ -12,6 +12,7 @@ import {
   Text,
   View,
   ListView,
+  AlertIOS,
 } from 'react-native';
 
 const StatusBar = require('./components/StatusBar');
@@ -53,6 +54,22 @@ export default class App extends Component<{}> {
     );
   }
 
+  _addItem() {
+    AlertIOS.prompt(
+      'Add New Item',
+      'Please input item name.',
+      [
+        {
+          text: 'Add',
+          onPress: (text) => {
+            this.itemsRef.push({title: text});
+          },
+        }
+      ],
+      'plain-text',
+    );
+  }
+
   listenForItems(itemsRef) {
     itemsRef.on('value', (snap) => {
       // Get children as an array
@@ -80,7 +97,7 @@ export default class App extends Component<{}> {
       <View style={styles.container}>
         <StatusBar title="Grocery List"/>
         <ListView dataSource={this.state.dataSource} renderRow={this._renderItem.bind(this)} style={styles.listView}/>
-        <ActionButton title="Add" onpress={ () => {""}}/>
+        <ActionButton title="Add" onPress={this._addItem.bind(this)}/>
       </View>
     );
   }
